@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Organograms Explorer: A D3 Guide to the Civil Service &middot; Tom Rees</title>
+    <meta name="author" content="Tom Rees">
+    <meta name="description" content="Projects and blog posts by Tom Rees.">
+    <meta name="generator" content="Hugo 0.15" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <link rel="shortcut icon" href="http://tomre.es/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.2/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://tomre.es/css/screen.css">
+    <link rel="stylesheet" href="http://tomre.es/gen/app.css">
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #f05948;}
+    .pagination a {color: #f05948;}
+    .gist .gist-file .gist-meta a:visited {color: #f05948 !important;}
+    a:focus, a:hover {color: #c62310;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #c62310;}
+    .older-posts:hover, .newer-posts:hover {color: #c62310;}
+</style>
+
+    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+
+<body class="post-template">
+
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://tomre.es/">Tom Rees</a></h1>
+	
+	
+	<h1 class="blog-subtitle">Web Hacking. Data Science. Occasional Soldering.</h1>
+	
+</header>
+    
+
+    <main class="content" role="main">
+	    <article class="post">
+	        <header>
+	        <h1 class="post-title">Organograms Explorer: A D3 Guide to the Civil Service</h1>
+	        <div class="post-meta"><time datetime="01 March 2014">01 March 2014</time></div>
+	        </header>
+
+	        <section class="post-content">
+	            <p>This is personal side-project which was picked up for further development by the UK Cabinet Office. Smaller agencies such as the <em>Government Procurement Service</em> work best. To see the template break down, try something like <em>Ministry of Justice</em>.</p>
+    
+<div id="organograms-loading">
+  <em style="text-align: center; display: block; height: 100px; line-height: 100px; ">Loading...</em>
+</div>
+<div id="organograms-container" style="display:none;">
+<table id="index-table">
+  <tr>
+    <td class="left">Department:</td>
+    <td class="right"><select style="width: 100%;" id="index"></select></td>
+  </tr>
+</table>
+
+<div id="organogram-view-mode">
+  <div class="organogram-click-hint">&lArr; Try clicking!</div>
+<div class="radio">
+  <label>
+    <input type="radio" class="organogram-button" name="optionsRadios" value="option1" checked="checked" />
+    View as Organisation Chart
+  </label>
+</div>
+<div class="radio">
+  <label>
+    <input type="radio"  class="organogram-button" name="optionsRadios" value="option2" />
+    View as Money Map
+  </label>
+</div>
+</div>
+
+<div id="organogram-viz"></div>
+</div>
+
+<hr/>
+
+<ul>
+  <li>I used a Python scraper to pull all the <a href="https://data.gov.uk/dataset/staff-organograms-and-pay-civil-service-learning">UK Civil Service Organograms Data</a> from the linked-data triplestore.</li>
+  <li>I learned to hate linked data and triplestores. If you think they are a good idea I can prove you wrong. With science.</li>
+  <li>This data is <strong>out of date!</strong> It was scraped around mid-2012.</li>
+  <li>I wanted to build a communication tool to represent both the hierarchy of roles in the civil service, and the respective pay scales.</li>
+</ul>
+
+<hr/>
+
+
+<script src="/organograms/modernizr-latest.js"></script>
+<script src="/organograms/d3.v3.js" charset="utf-8"></script>
+<script src="/organograms/chosen.jquery.min.js" charset="utf-8"></script>
+<script src="/gen/organograms.js"></script>
+<link rel="stylesheet" href="/organograms/chosen.min.css"/>
+<link rel="stylesheet" href="/gen/organograms.css"/>
+
+
+	        </section>
+
+	        <section class="post-tags" style="padding-bottom:60px;">
+	            <div class="post-meta tags">
+	            <i class="fa fa-fw fa-tag"></i>
+	            
+	            </div>
+	        </section>
+			
+			
+			
+			
+
+	        <section class="share">
+	            <p class="backtotop"><a data-scroll href="#site-head"><i class="fa fa-lg fa-fw fa-angle-double-up"></i></a><a data-scroll class="backtotoptext" href="#site-head"> Back to top</a></p>
+	            <p class="info prompt">Share</p>
+	            <a href="http://twitter.com/share?text=Organograms%20Explorer%3a%20A%20D3%20Guide%20to%20the%20Civil%20Service&url=http%3a%2f%2ftomre.es%2fpost%2forganograms-a-d3-guide-to-the-civil-service%2f" title="Share on Twitter"
+	                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+	                <i class="fa fa-2x fa-fw fa-twitter-square"></i> <span class="hidden">Twitter</span>
+	            </a>
+	            <a href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2ftomre.es%2fpost%2forganograms-a-d3-guide-to-the-civil-service%2f" title="Share on Facebook"
+	                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+	                <i class="fa fa-2x fa-fw fa-facebook-square" style="margin-left: -8px"></i> <span class="hidden">Facebook</span>
+	            </a>
+	            <a href="https://plus.google.com/share?url=http%3a%2f%2ftomre.es%2fpost%2forganograms-a-d3-guide-to-the-civil-service%2f" title="Share on Google+"
+	               onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+	                <i class="fa fa-2x fa-fw fa-google-plus-square" style="margin-left: -8px"></i> <span class="hidden">Google+</span>
+	            </a>
+	        </section>
+
+	        <footer class="post-footer">
+	            <section class="author">
+    <div class="authorimage" style="background: url(http://tomre.es/img/avatar.jpg)"></div>
+    <h4>Tom Rees</h4>
+    <p class="bio">Hacker, entrepreneur, and founder of <a href="http://datapress.com">DataPress</a>.<br/>I live in London, I drink strong coffee and I love brightly coloured graphs.</p>
+    <p class="meta">
+      <i class="fa fa-fw fa-map-marker"></i> London
+    </p>
+</section>
+	        </footer>
+	    </article>
+	</main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+			
+		    <a href="//twitter.com/zephod" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+		    
+		    
+		    <a href="//github.com/zephod" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+		    
+		    <a href="" target="_blank" title="RSS"><i class="fa fa-2x fa-fw fa-rss"></i> <span class="hidden">RSS</span></a>
+		</section>
+
+		<section class="copyright">&copy; 2016 <a href="http://tomre.es/">Tom Rees</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+    <script src="http://tomre.es/gen/app.js"></script>
+<script src="http://tomre.es/js/smooth-scroll.min.js"></script>
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+
+
+<!-- Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-21330985-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>

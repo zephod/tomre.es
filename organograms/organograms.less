@@ -1,0 +1,99 @@
+#index {
+}
+#index-table {
+  .left {
+    padding-left: 18px;
+    width: 20%;
+    padding-right: 10px;
+    text-align: right;
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: normal;
+  }
+  td {
+    height: 40px;
+    vertical-align: middle;
+  }
+  margin-bottom: 0px;
+}
+.chosen-results li {
+  font-family: inherit !important;
+  font-size: 13px;
+
+}
+#organogram-view-mode {
+  font-size: 18px;
+  line-height: 30px;
+  font-weight: normal;
+  position: relative;
+  .organogram-click-hint {
+    position: absolute;
+    left: 230px;
+    top: 31px;
+    color: #00aaff;
+    font-size: 28px;
+  }
+}
+#organogram-viz {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  position: relative;
+  height: 800px;
+  svg {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -450px;
+
+    display: block;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+    text { 
+      pointer-events: none; 
+      fill: #000;
+    }
+    text.invertText {
+      fill: #fff;
+    }
+    .person:hover {
+      rect {
+        fill-opacity: 0.8;
+      }
+      text {
+        stroke: #000;
+        stroke-width: 0.5px;
+      }
+      text.invertText {
+        stroke: #fff;
+      }
+    }
+  }
+  position: relative;
+  .hoverbox {
+    position: absolute;
+    display: none;
+    width: 280px;
+    font-size: 9px;
+    border: 1px solid #000;
+    padding: 2px;
+    background: #fff;
+    table { 
+      margin: 0 0 0 0; 
+      td {
+        padding: 1px 5px;
+      }
+      td:first-child {
+        font-weight: bold;
+        text-align: right;
+        min-width: 45%;
+      }
+    }
+  }
+}
+
+

@@ -1,0 +1,46 @@
+body {
+  background-image: url("/img/tomrees.jpg");
+  background-repeat: no-repeat;
+  background-size: 1000px;
+  background-position: 50% 43px;
+  overflow: visible;
+}
+#site-head {
+  border-bottom: 1px solid #ccc;
+}
+#site-head .blog-subtitle {
+  font-size: 23px;
+  margin-top: -3px;
+  margin-bottom: 55px;
+}
+section.author p.bio {
+  font-size: 13px;
+  line-height: 1.5em;
+}
+section.post-tags {
+  display: none;
+}
+/* Front Page */
+.home-template main {
+  max-width: 600px;
+  margin: 20px auto;
+  width: 90%;
+  display: table;
+}
+.home-template main article.preview {
+  margin: 0 10px 0 10px;
+  max-width: 280px;
+  width: 100%;
+  height: 360px;
+  float: left;
+}
+.home-template main article.preview h2 a {
+  color: #000;
+}
+.home-template main article.preview .excerptlink p {
+  color: #000;
+  margin-top: 0px;
+}
+.home-template main article.preview img.post-thumbnail {
+  width: 100%;
+}

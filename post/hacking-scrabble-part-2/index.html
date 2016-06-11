@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Hacking Scrabble (2 of 2) &middot; Tom Rees</title>
+    <meta name="author" content="Tom Rees">
+    <meta name="description" content="Projects and blog posts by Tom Rees.">
+    <meta name="generator" content="Hugo 0.15" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <link rel="shortcut icon" href="http://tomre.es/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.2/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://tomre.es/css/screen.css">
+    <link rel="stylesheet" href="http://tomre.es/gen/app.css">
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #f05948;}
+    .pagination a {color: #f05948;}
+    .gist .gist-file .gist-meta a:visited {color: #f05948 !important;}
+    a:focus, a:hover {color: #c62310;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #c62310;}
+    .older-posts:hover, .newer-posts:hover {color: #c62310;}
+</style>
+
+    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+
+<body class="post-template">
+
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://tomre.es/">Tom Rees</a></h1>
+	
+	
+	<h1 class="blog-subtitle">Web Hacking. Data Science. Occasional Soldering.</h1>
+	
+</header>
+    
+
+    <main class="content" role="main">
+	    <article class="post">
+	        <header>
+	        <h1 class="post-title">Hacking Scrabble (2 of 2)</h1>
+	        <div class="post-meta"><time datetime="27 July 2012">27 July 2012</time></div>
+	        </header>
+
+	        <section class="post-content">
+	            
+
+<h2 id="hacking-scrabble-http-blog-zephod-com-post-28118665268-hacking-scrabble:9043a2639db2573b622f2de621fc9ca2"><a href="http://blog.zephod.com/post/28118665268/hacking-scrabble">Hacking Scrabble</a></h2>
+
+<p><strong>TL;DR:</strong> Skip straight to these summary graphics to improve your Scrabble game:</p>
+
+<p><a href="#results"><img src="/img/hacking_scrabble_preview.png" alt="Jump to Hacking Scrabble results" /></a></p>
+
+<h2 id="introduction:9043a2639db2573b622f2de621fc9ca2">Introduction</h2>
+
+<p>A while ago I was <a href="http://blog.zephod.com/post/14167418899/hacking-scrabble-part-1">blogging about</a> a little research project I called Hacking Scrabble, which received a lot of interest and was <a href="http://lifehacker.com/5868095/hacking-scrabble-part-one">published on LifeHacker</a>. I was trying to get better at the game by using the kind of memory tricks we learned in school:</p>
+
+<blockquote>
+<p><em>“My Very Easy Method Just Speeds Up Naming Planets”</em></p>
+</blockquote>
+
+<p>I’m a programmer by trade so inevitably I wrote <a href="http://github.com/zephod/scrabble-tools">Mnemonic Finder</a>, a Python program to quickly search the dictionary looking for these kinds of phrases. The idea was to memorise all <strong>two-letter words</strong>, which I’m targeting because:</p>
+
+<ul>
+<li>They are vital. Games become stagnant when the board is full up and nobody can play in the tight corners without creating a string of two-letter words.</li>
+<li>There aren’t actually that many of them: 124 in the international rules, 101 in the US rules.</li>
+</ul>
+
+<hr />
+
+<h2 id="the-solution-first-attempt:9043a2639db2573b622f2de621fc9ca2">The Solution (First Attempt)</h2>
+
+<p>My <a href="http://blog.zephod.com/post/14167418899/hacking-scrabble-part-1">first attempt at writing this column</a> arrived at a technique which <em>sort of</em> worked.</p>
+
+<ul>
+<li>Every 2 letter word is a <strong>prefix</strong> and a <strong>suffix</strong>.
+
+<ul>
+<li><em>eg. <strong>“at”</strong> has a prefix <strong>“a”</strong> and a suffix <strong>“t”</strong></em></li>
+</ul></li>
+<li>So every <strong>prefix</strong> can have a few different <strong>suffixes</strong>.
+
+<ul>
+<li><em>The prefix <strong>a</strong> can have suffix <strong>t</strong> but not suffix <strong>q</strong>, because <strong>aq</strong> is not a word.</em></li>
+</ul></li>
+<li>For each letter, list _all_its possible suffixes.
+
+<ul>
+<li><em><strong>a</strong> can have any of: <strong>abdeghilmnrstwxy</strong></em></li>
+</ul></li>
+<li>Use Mnemonic Finder to look for a phrase which <strong>contains all those letters</strong> but <strong>no other letters</strong>.
+
+<ul>
+<li><em>“<strong>birthdays mangle wax</strong>” will help you remember all the letters that can go after <strong>a</strong>.</em></li>
+</ul></li>
+</ul>
+
+<hr />
+
+<h2 id="why-doesn-t-it-work:9043a2639db2573b622f2de621fc9ca2">Why Doesn’t It Work?</h2>
+
+<p>First, it’s not <em>that</em> great. I still need to memorise twenty six phrases and know which letter they each apply to.</p>
+
+<p>Second, the suffixes of <strong>u</strong> are <strong>ghmnprst</strong>. Can you see the problem? There are no vowels! <strong>ua</strong>, <strong>ue</strong>, <strong>ui</strong>, <strong>uo</strong>, and <strong>uu</strong> are not words. So Mnemonic Finder can’t find a single thing in the dictionary. Maybe you can learn it by saying it out loud: “Gahumnapurst”. Maybe not.</p>
+
+<p>In fact, out of twenty six attempts, I only succeeded in finding about ten useful phrases. Okay, it’s better than learning over a hundred words, but we can do better still with a little lateral thinking.</p>
+
+<hr />
+
+<h2 id="restructuring-the-problem:9043a2639db2573b622f2de621fc9ca2">Restructuring The Problem</h2>
+
+<p>Many astute readers emailed me to point out that <strong>nearly all two-letter words contain a vowel</strong>. Instead of memorising the suffixes of every letter, we could memorise the <strong>suffixes and prefixes of every vowel</strong>.</p>
+
+<table>
+<thead>
+<tr>
+<th align="right">&laquo; prefixes</th>
+<th align="center">|</th>
+<th align="left">suffixes &raquo;</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="right">ztnlkjhdbfypmae</td>
+<td align="center"><strong>a</strong></td>
+<td align="left">aeibdghlmnrstwxy</td>
+</tr>
+
+<tr>
+<td align="right">ywtrpnmhfdbaeo</td>
+<td align="center"><strong>e</strong></td>
+<td align="left">aedfhlmnrstx</td>
+</tr>
+
+<tr>
+<td align="right">xtsqpmlhkdgboa</td>
+<td align="center"><strong>i</strong></td>
+<td align="left">odfnst</td>
+</tr>
+
+<tr>
+<td align="right">zywtsmlkjhbdgnpio</td>
+<td align="center"><strong>o</strong></td>
+<td align="left">eioubdfhmnprswxy</td>
+</tr>
+
+<tr>
+<td align="right">gmnxyo</td>
+<td align="center"><strong>u</strong></td>
+<td align="left">ghmnprst</td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>This is a great idea: We only have to memorise _ten phrases_… plus a few words containing no vowels.</li>
+<li>However, the computer still has trouble finding words in the dictionary… “<strong>ghmnprst</strong>” is still up there.</li>
+<li>There’s a bit of redundant information in there. <strong>o</strong> is both a <strong>prefix</strong> and a <strong>suffix</strong> of itself because <strong>oo</strong> is a word.</li>
+</ul>
+
+<p>We’re on the right path. A final step is needed to make this work.</p>
+
+<hr />
+
+<h2 id="just-the-consonants-please:9043a2639db2573b622f2de621fc9ca2">Just The Consonants, Please</h2>
+
+<p>The problem is that it’s hard to find mnemonics if you don’t have many vowels. I experimented with a tweak to Mnemonic Finder allowing it to use <em>all the vowels it likes</em>, and once again gave it <strong>ghmnprst</strong>.</p>
+
+<pre><code>&quot;prognathism&quot;
+&quot;graph mints&quot;
+&quot;hemp string&quot;
+&quot;nightmare gasp&quot;
+...
+</code></pre>
+
+<p>Thousands of phrases tumbled out! This is the key to the solution: Let’s seperate the vowels from the consonants. Here’s the table again with <strong>only consonants</strong> in the left and right columns.</p>
+
+<table>
+<thead>
+<tr>
+<th align="right">&laquo; prefixes</th>
+<th align="center">|</th>
+<th align="left">suffixes &raquo;</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="right">ztnlkjhdbfypm</td>
+<td align="center"><strong>a</strong></td>
+<td align="left">bdghlmnrstwxy</td>
+</tr>
+
+<tr>
+<td align="right">ywtrpnmhfdb</td>
+<td align="center"><strong>e</strong></td>
+<td align="left">dfhlmnrstx</td>
+</tr>
+
+<tr>
+<td align="right">xtsqpmlhkdgb</td>
+<td align="center"><strong>i</strong></td>
+<td align="left">dfnst</td>
+</tr>
+
+<tr>
+<td align="right">zywtsmlkjhbdgnp</td>
+<td align="center"><strong>o</strong></td>
+<td align="left">bdfhmnprswxy</td>
+</tr>
+
+<tr>
+<td align="right">gmnxy</td>
+<td align="center"><strong>u</strong></td>
+<td align="left">ghmnprst</td>
+</tr>
+</tbody>
+</table>
+
+<p>The words we had to remove were the <strong>double vowels</strong>. A shame that they didn’t fit, but they won’t be too difficult to memorise: There’s only nine of them (or just five for players in the USA).</p>
+
+<pre><code>aa ae ai ee ea io oo ou oe 
+</code></pre>
+
+<p>Finally, I’ve avoided telling you about the <strong>double consonants</strong>. They never fitted onto that table anyway, and must also be memorised the hard way:</p>
+
+<pre><code>sh ch st mm hm my ky fy by ny
+</code></pre>
+
+<hr />
+
+<h2 id="through-the-mnemonic-machine:9043a2639db2573b622f2de621fc9ca2">Through the Mnemonic Machine</h2>
+
+<p>Using Mnemonic Finder in “free vowels mode” produces hundreds (usually thousands) of dictionary words for each entry in the table. At last, we can replace ugly blocks such as <strong>ghmnprst</strong> with meaningful, memorable phrases like <strong>hemp string</strong>.</p>
+
+<table>
+<thead>
+<tr>
+<th align="right">&laquo; prefixes</th>
+<th align="center">|</th>
+<th align="left">suffixes &raquo;</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="right">the band played folk jazz metal</td>
+<td align="center"><strong>a</strong></td>
+<td align="left">birthdays mangle wax</td>
+</tr>
+
+<tr>
+<td align="right">thumbprint fade away</td>
+<td align="center"><strong>e</strong></td>
+<td align="left">tax his farmland</td>
+</tr>
+
+<tr>
+<td align="right">exquisite godlike humble pie</td>
+<td align="center"><strong>i</strong></td>
+<td align="left">infested</td>
+</tr>
+
+<tr>
+<td align="right">mask playing with jazz band</td>
+<td align="center"><strong>o</strong></td>
+<td align="left">six dumb hippy windsurfers</td>
+</tr>
+
+<tr>
+<td align="right">onyx gem</td>
+<td align="center"><strong>u</strong></td>
+<td align="left">hemp string</td>
+</tr>
+</tbody>
+</table>
+
+<p>You can generate your own if these aren’t to your taste. I prefer phrases with a powerful (if absurd) mental image. I’ve logged my development in a public gist for both the <a href="https://gist.github.com/3141231">International version</a> and the <a href="https://gist.github.com/3141380">US/Canada version</a>.</p>
+
+<p>It is important to remember that we are <strong>just memorising consonants</strong>. The suffixes of <strong>i</strong> are <strong>“infested”</strong>, meaning <strong>n</strong>, <strong>f</strong>, <strong>s</strong>, <strong>t</strong>, or <strong>d</strong>. Ignore the vowels; <strong>ie</strong> is not a word.</p>
+
+<p>Once you understand and memorise that table, you know <strong>one hundred and four</strong> words! The remaining twenty I leave to you. Did you think it was all going to be that easy?</p>
+
+<pre><code>aa ae ai ee ea io oo ou oe 
+sh ch st mm hm my ky fy by ny
+</code></pre>
+
+<hr />
+
+<h2 id="in-a-real-life-battle-situation:9043a2639db2573b622f2de621fc9ca2">In A Real Life Battle Situation&hellip;</h2>
+
+<p>So you want to play a two-letter-word, but you’re not sure it exists?</p>
+
+<ul>
+<li>If it’s a <strong>double consonant</strong>, you should know it by heart.</li>
+<li>If it’s a <strong>double vowel</strong>, you should also know it by heart!</li>
+<li>If it <strong>starts with a vowel</strong>, think of the <strong>right hand column</strong>.
+
+<ul>
+<li><em>Eg. The first letter is <strong>e</strong>, the second letter must be in <strong>tax his farmland</strong>.</em></li>
+</ul></li>
+<li>If it <strong>ends with a vowel</strong>, think of the <strong>left hand column</strong>.
+
+<ul>
+<li><em>Eg. if the last letter is <strong>e</strong>, the first letter must be in <strong>thumbprint fade away</strong>.</em></li>
+</ul></li>
+</ul>
+
+<p>Fortunately, I have turned all of this into a beautiful infographic that you can print out and treasure forever.</p>
+
+<hr />
+
+<h2 id="a-name-results-a-for-players-using-the-north-american-rules:9043a2639db2573b622f2de621fc9ca2"><a name="results"></a> For players using the North American rules</h2>
+
+<p><a href="/img/hacking_scrabble_us.png"><img src="/img/hacking_scrabble_us.png" alt="Hacking Scrabble Cheatsheet: US Edition" /></a></p>
+
+<ul>
+<li>Valid in the US, Canada, and Thailand</li>
+<li>Source data: <a href="https://gist.github.com/3141380">https://gist.github.com/3141380</a></li>
+</ul>
+
+<hr />
+
+<h2 id="for-players-using-the-international-rules:9043a2639db2573b622f2de621fc9ca2">For players using the International rules</h2>
+
+<p><a href="/img/hacking_scrabble_uk.png"><img src="/img/hacking_scrabble_uk.png" alt="Hacking Scrabble Cheatsheet: Internatinoal Edition" /></a></p>
+
+<ul>
+<li>Valid everywhere <em>except</em> the US, Canada and Thailand</li>
+<li>Source data: <a href="https://gist.github.com/3141231">https://gist.github.com/3141231</a></li>
+</ul>
+
+<hr />
+
+<p>This article was originally published on zephod.com on Tumblr, and has been migrated to tomre.es on GitHub Pages.</p>
+
+<p><img src="/img/tumblr_archive_2.png" alt="(defunct) Tumblr Social Links" style="margin: 0; width: 292px;"/></p>
+
+	        </section>
+
+	        <section class="post-tags" style="padding-bottom:60px;">
+	            <div class="post-meta tags">
+	            <i class="fa fa-fw fa-tag"></i>
+	            
+	            </div>
+	        </section>
+			
+			
+			
+			
+
+	        <section class="share">
+	            <p class="backtotop"><a data-scroll href="#site-head"><i class="fa fa-lg fa-fw fa-angle-double-up"></i></a><a data-scroll class="backtotoptext" href="#site-head"> Back to top</a></p>
+	            <p class="info prompt">Share</p>
+	            <a href="http://twitter.com/share?text=Hacking%20Scrabble%20%282%20of%202%29&url=http%3a%2f%2ftomre.es%2fpost%2fhacking-scrabble-part-2%2f" title="Share on Twitter"
+	                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+	                <i class="fa fa-2x fa-fw fa-twitter-square"></i> <span class="hidden">Twitter</span>
+	            </a>
+	            <a href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2ftomre.es%2fpost%2fhacking-scrabble-part-2%2f" title="Share on Facebook"
+	                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+	                <i class="fa fa-2x fa-fw fa-facebook-square" style="margin-left: -8px"></i> <span class="hidden">Facebook</span>
+	            </a>
+	            <a href="https://plus.google.com/share?url=http%3a%2f%2ftomre.es%2fpost%2fhacking-scrabble-part-2%2f" title="Share on Google+"
+	               onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+	                <i class="fa fa-2x fa-fw fa-google-plus-square" style="margin-left: -8px"></i> <span class="hidden">Google+</span>
+	            </a>
+	        </section>
+
+	        <footer class="post-footer">
+	            <section class="author">
+    <div class="authorimage" style="background: url(http://tomre.es/img/avatar.jpg)"></div>
+    <h4>Tom Rees</h4>
+    <p class="bio">Hacker, entrepreneur, and founder of <a href="http://datapress.com">DataPress</a>.<br/>I live in London, I drink strong coffee and I love brightly coloured graphs.</p>
+    <p class="meta">
+      <i class="fa fa-fw fa-map-marker"></i> London
+    </p>
+</section>
+	        </footer>
+	    </article>
+	</main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+			
+		    <a href="//twitter.com/zephod" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+		    
+		    
+		    <a href="//github.com/zephod" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+		    
+		    <a href="" target="_blank" title="RSS"><i class="fa fa-2x fa-fw fa-rss"></i> <span class="hidden">RSS</span></a>
+		</section>
+
+		<section class="copyright">&copy; 2016 <a href="http://tomre.es/">Tom Rees</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+    <script src="http://tomre.es/gen/app.js"></script>
+<script src="http://tomre.es/js/smooth-scroll.min.js"></script>
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+
+
+<!-- Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-21330985-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>

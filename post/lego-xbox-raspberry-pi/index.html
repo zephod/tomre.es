@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>HOWTO: Build an RC Car using Lego and a Raspberry Pi &middot; Tom Rees</title>
+    <meta name="author" content="Tom Rees">
+    <meta name="description" content="Projects and blog posts by Tom Rees.">
+    <meta name="generator" content="Hugo 0.15" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <link rel="shortcut icon" href="http://tomre.es/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.2/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://tomre.es/css/screen.css">
+    <link rel="stylesheet" href="http://tomre.es/gen/app.css">
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #f05948;}
+    .pagination a {color: #f05948;}
+    .gist .gist-file .gist-meta a:visited {color: #f05948 !important;}
+    a:focus, a:hover {color: #c62310;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #c62310;}
+    .older-posts:hover, .newer-posts:hover {color: #c62310;}
+</style>
+
+    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+
+<body class="post-template">
+
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://tomre.es/">Tom Rees</a></h1>
+	
+	
+	<h1 class="blog-subtitle">Web Hacking. Data Science. Occasional Soldering.</h1>
+	
+</header>
+    
+
+    <main class="content" role="main">
+	    <article class="post">
+	        <header>
+	        <h1 class="post-title">HOWTO: Build an RC Car using Lego and a Raspberry Pi</h1>
+	        <div class="post-meta"><time datetime="03 December 2012">03 December 2012</time></div>
+	        </header>
+
+	        <section class="post-content">
+	            
+
+<p><strong>Edit:</strong> See <a href="http://www.flickr.com/photos/zephod/sets/72157632285374850/">the Lego/Raspberry Pi project on Flickr</a> for a photo diary of the construction process.</p>
+
+<p><a href="http://www.flickr.com/photos/zephod/sets/72157632285374850/"><img src="/img/legocar_flickr.jpg" alt="Flickr Photos" /></a></p>
+
+<hr />
+
+<p>When I was a child I always wanted a remote control car. I never got one – usually my parents convinced me that the novelty would wear off in an hour, and that it wouldn’t be worth the expense. (They were probably right). I usually opted for a safer videogame-based option at Christmas time, and on my birthday I’d ask for Lego. </p>
+
+<p><img src="/img/raspberrypi.jpg" alt="Raspberry Pi" /></p>
+
+<p>The Raspberry Pi – a tiny, low-power computer that fits in the palm of your hand – provided the inspiration for a project to finally put that right. Using bricks from my childhood Lego collection, and a wireless Xbox 360 controller from my teenage years, at long last I could hack together a remote control car! How hard could it be?</p>
+
+<h2 id="not-exactly-simple:3182ed04c08c27eb0fccf88285c1f4bb">Not exactly simple</h2>
+
+<p>I’m a programmer by trade, but any knowledge of electronics learned during University apparently died at graduation. The necessary software configuration and ~200 lines of Python coding took very little time. The fairly simple circuitry took a <em>long</em> time, and caught fire on several occasions. Your mileage may vary. </p>
+
+<p>There have been similar attempts to control RC cars from an Xbox controller:</p>
+
+<ul>
+<li><a href="http://www.youtube.com/watch?v=LHLnw9Yt1rk">Dan from Chicago</a> put a Netduino controller on his car which connects via his laptop.</li>
+<li><a href="http://www.jedibowler.com/2011/09/24/controlling-an-rc-car-with-an-xbox-360-controller-via-a-netduino/">Keegan at jedibowler.com</a> used Netduino on the car as well, and has a PC on the floor issuing commands.</li>
+</ul>
+
+<p>This project takes it a step further because the Raspberry Pi is a complete computer, so <strong>all the hardware lives on the car</strong>. There is no need for a laptop issuing commands over Wifi.</p>
+
+<h2 id="building-the-chassis:3182ed04c08c27eb0fccf88285c1f4bb">Building the Chassis</h2>
+
+<p>The design of the chassis aims to be as simple and robust as possible. </p>
+
+<p><img src="/img/legocar1.jpg" alt="" /></p>
+
+<p>No, really, robustness is key. Some observations:</p>
+
+<ul>
+<li>Use Technic clip-joints and axles through everything. </li>
+<li>Using Lego studs to join any two parts of the chassis was a waste of effort. Shearing stress pulls them apart easily. </li>
+<li>Servos and motors would rather pull the Lego apart than turn the wheels. They need to be very firmly held in place.</li>
+</ul>
+
+<p>Two motors are required:</p>
+
+<ul>
+<li>The steering is controlled via a high torque <a href="http://adafruit.com/products/155">180 degree Towerpro servo from AdaFruit</a>. A Lego gear is attached with superglue.</li>
+<li>The rear axle is attached to a <a href="http://shop.lego.com/en-US/LEGO-Power-Functions-XL-Motor-8882">Lego Power Functions XL-Motor</a>. </li>
+</ul>
+
+<p><img src="/img/legomotor.jpg" style="margin: 0 10px 10px 10px; float: right;" />
+Originally I used an old 9V Technic motor, but it wasn’t strong enough to turn the rear axle. There’s a fascinating <a href="http://www.philohome.com/motors/motorcomp.htm">analysis of Lego motors on philohome.com</a> which suggests that the newer motor has around 40 times more torque. I purchased one online for just $10.</p>
+
+<h2 id="electronics-and-soldering:3182ed04c08c27eb0fccf88285c1f4bb">Electronics and Soldering</h2>
+
+<p>The motors are controlled via PWM (<em>Pulse Width Modulation</em>) using the excellent <a href="http://adafruit.com/products/815">Adafruit 16-channel PWM driver</a>.</p>
+
+<p><img src="/img/pwmdriver.png" alt="" /></p>
+
+<p>The <a href="http://learn.adafruit.com/adafruit-16-channel-servo-driver-with-raspberry-pi">tutorials on Adafruit’s website</a> are truly exemplary, and in less than an hour I had the Raspberry Pi controlling motor speed and servo rotation. </p>
+
+<p><img src="/img/legocar2.jpg" alt="" /></p>
+
+<p>The above shot demonstrates circuitry mounted onto the chassis.</p>
+
+<ul>
+<li>Adafruit’s <a href="http://adafruit.com/products/914">Cobbler Breakout Kit</a> is used to connect the Raspberry Pi to a prototyping plug-board.</li>
+<li>The i2c connectors (<code>SDA0</code> and <code>SCL0</code>, <code>3v3</code> and <code>GND</code>) are then connected to the PWM driver.</li>
+<li>GPIO pins <code>21</code> and <code>17</code> are connected to a cheap <a href="http://en.wikipedia.org/wiki/H_bridge">H Bridge</a> chip, specifically the <a href="http://www.pololu.com/catalog/product/713">TB6612FNG from pololu.com</a>. This will drive the main motor forwards or backwards. </li>
+<li>Output <code>0</code> on the PWM driver runs into the H Bridge. This controls the main motor’s speed.</li>
+<li>Output <code>1</code> on the PWM driver runs to the steering servo.</li>
+</ul>
+
+<h2 id="software:3182ed04c08c27eb0fccf88285c1f4bb">Software</h2>
+
+<p>Finally, the Raspberry Pi must be loaded with some software which translates Xbox controller buttons into motor speed, motor direction, and steering rotation. </p>
+
+<p><img src="/img/xboxdongle.jpg" alt="" /></p>
+
+<p>The <a href="http://www.amazon.co.uk/Xbox-Wireless-Gaming-Receiver-Windows/dp/B000MGVAAQ">Xbox 360 Wireless Gaming Receiver for Windows</a> is required to connect the controller. Microsoft use a custom wireless protocol, so a regular Bluetooth modem will not work. This bulky device consumes quite a lot of power, but at least it is relatively inexpensive.</p>
+
+<p>“For Windows” should not be taken too seriously. Ingo Ruhnke’s excellent <a href="http://pingus.seul.org/~grumbel/xboxdrv/">Xbox/Xbox 360 USB Gamepad Driver for Linux</a> is a perfect solution for hooking up the wireless USB device, and it installs in seconds on a Raspberry Pi running Ubuntu.</p>
+
+<p>At last, I can get back to programming! I hacked together a couple of Python modules to:</p>
+
+<ul>
+<li>Run <code>xboxdrv</code> as a subprocess, which connects to the controller.</li>
+<li>Read from the <code>stdout</code> pipe as it constantly prints out the controller state.</li>
+<li>Watch for changes in <code>LT</code> (left trigger), <code>RT</code> (right trigger) and <code>X1</code> (left thumbstick).</li>
+<li>Update the outputs as appropriate through Adafruit’s libraries.</li>
+</ul>
+
+<p>For example, to control the steering:</p>
+
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span style="color: #177500"># Left thumbstick controls the steering</span>
+<span style="color: #A90D91">if</span> <span style="color: #000000">event.key==</span><span style="color: #C41A16">&#39;X1&#39;</span>:
+    <span style="color: #000000">steer</span> <span style="color: #000000">=</span> <span style="color: #A90D91">int</span>( <span style="color: #000000">servoMid</span> <span style="color: #000000">+</span> (<span style="color: #000000">servoWidth*-event.value</span>)<span style="color: #000000">/</span><span style="color: #1C01CE">32768</span> )
+    <span style="color: #000000">pwm.setPWM</span>(<span style="color: #1C01CE">1</span>, <span style="color: #1C01CE">0</span>, <span style="color: #000000">steer</span>)
+</pre></div>
+
+
+<p>The complete software kit is available in <a href="http://github.com/zephod/lego-pi">a repository on Github</a>.</p>
+
+<h2 id="completion:3182ed04c08c27eb0fccf88285c1f4bb">Completion</h2>
+
+<p>Here’s my DIY-RC-Car in action. Enjoy!</p>
+
+<p><center>
+<iframe frameborder="0" height="284" src="http://www.youtube.com/embed/X7YRqCCBDBU" width="505"></iframe>
+</center></p>
+
+	        </section>
+
+	        <section class="post-tags" style="padding-bottom:60px;">
+	            <div class="post-meta tags">
+	            <i class="fa fa-fw fa-tag"></i>
+	            
+	            </div>
+	        </section>
+			
+			
+			
+			
+
+	        <section class="share">
+	            <p class="backtotop"><a data-scroll href="#site-head"><i class="fa fa-lg fa-fw fa-angle-double-up"></i></a><a data-scroll class="backtotoptext" href="#site-head"> Back to top</a></p>
+	            <p class="info prompt">Share</p>
+	            <a href="http://twitter.com/share?text=HOWTO%3a%20Build%20an%20RC%20Car%20using%20Lego%20and%20a%20Raspberry%20Pi&url=http%3a%2f%2ftomre.es%2fpost%2flego-xbox-raspberry-pi%2f" title="Share on Twitter"
+	                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+	                <i class="fa fa-2x fa-fw fa-twitter-square"></i> <span class="hidden">Twitter</span>
+	            </a>
+	            <a href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2ftomre.es%2fpost%2flego-xbox-raspberry-pi%2f" title="Share on Facebook"
+	                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+	                <i class="fa fa-2x fa-fw fa-facebook-square" style="margin-left: -8px"></i> <span class="hidden">Facebook</span>
+	            </a>
+	            <a href="https://plus.google.com/share?url=http%3a%2f%2ftomre.es%2fpost%2flego-xbox-raspberry-pi%2f" title="Share on Google+"
+	               onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+	                <i class="fa fa-2x fa-fw fa-google-plus-square" style="margin-left: -8px"></i> <span class="hidden">Google+</span>
+	            </a>
+	        </section>
+
+	        <footer class="post-footer">
+	            <section class="author">
+    <div class="authorimage" style="background: url(http://tomre.es/img/avatar.jpg)"></div>
+    <h4>Tom Rees</h4>
+    <p class="bio">Hacker, entrepreneur, and founder of <a href="http://datapress.com">DataPress</a>.<br/>I live in London, I drink strong coffee and I love brightly coloured graphs.</p>
+    <p class="meta">
+      <i class="fa fa-fw fa-map-marker"></i> London
+    </p>
+</section>
+	        </footer>
+	    </article>
+	</main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+			
+		    <a href="//twitter.com/zephod" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+		    
+		    
+		    <a href="//github.com/zephod" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+		    
+		    <a href="" target="_blank" title="RSS"><i class="fa fa-2x fa-fw fa-rss"></i> <span class="hidden">RSS</span></a>
+		</section>
+
+		<section class="copyright">&copy; 2016 <a href="http://tomre.es/">Tom Rees</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+    <script src="http://tomre.es/gen/app.js"></script>
+<script src="http://tomre.es/js/smooth-scroll.min.js"></script>
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+
+
+<!-- Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-21330985-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>

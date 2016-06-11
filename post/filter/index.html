@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>/usr/bin/filter &middot; Tom Rees</title>
+    <meta name="author" content="Tom Rees">
+    <meta name="description" content="Projects and blog posts by Tom Rees.">
+    <meta name="generator" content="Hugo 0.15" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <link rel="shortcut icon" href="http://tomre.es/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.2/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://tomre.es/css/screen.css">
+    <link rel="stylesheet" href="http://tomre.es/gen/app.css">
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #f05948;}
+    .pagination a {color: #f05948;}
+    .gist .gist-file .gist-meta a:visited {color: #f05948 !important;}
+    a:focus, a:hover {color: #c62310;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #c62310;}
+    .older-posts:hover, .newer-posts:hover {color: #c62310;}
+</style>
+
+    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+
+<body class="post-template">
+
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://tomre.es/">Tom Rees</a></h1>
+	
+	
+	<h1 class="blog-subtitle">Web Hacking. Data Science. Occasional Soldering.</h1>
+	
+</header>
+    
+
+    <main class="content" role="main">
+	    <article class="post">
+	        <header>
+	        <h1 class="post-title">/usr/bin/filter</h1>
+	        <div class="post-meta"><time datetime="13 April 2012">13 April 2012</time></div>
+	        </header>
+
+	        <section class="post-content">
+	            
+
+<ul>
+<li><a href="https://github.com/downloads/zephod/filter/filter.zip">Download .ZIP</a><br /></li>
+<li><a href="https://github.com/downloads/zephod/filter/filter.tar.gz">Download .TAR.GZ</a></li>
+<li><a href="https://github.com/zephod/filter">View on Github</a></li>
+</ul>
+
+<hr />
+
+<h2 id="replacing-mv:03285bdc704a53de2afbdd4c6c57e10d">Replacing <code>mv</code></h2>
+
+<p>Filter uses <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> to rename files. I have always felt this is the &ldquo;missing UNIX command&rdquo;:</p>
+
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span style="color: #000000">$ </span>filter report* <span style="color: #C41A16">&quot;s/..from.chris.//&quot;</span>
+
+report analysis <span style="color: #000000">(</span>from chris<span style="color: #000000">)</span>.doc     -&gt;     report analysis.doc
+report datasheet <span style="color: #000000">(</span>from chris<span style="color: #000000">)</span>.xls    -&gt;     report datasheet.xls
+report discussion <span style="color: #000000">(</span>from chris<span style="color: #000000">)</span>.doc   -&gt;     report discussion.doc
+Rename these files? <span style="color: #000000">[</span>y/N<span style="color: #000000">]</span>
+</pre></div>
+
+
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span style="color: #000000">$ </span>filter * <span style="color: #C41A16">&quot;s/Episode./S01E0/&quot;</span>
+
+Game of Thrones Episode 1.mpg    -&gt;     Game of Thrones S01E01.mpg
+Game of Thrones Episode 2.mpg    -&gt;     Game of Thrones S01E02.mpg
+Game of Thrones Episode 3.mpg    -&gt;     Game of Thrones S01E03.mpg
+Rename these files? <span style="color: #000000">[</span>y/N<span style="color: #000000">]</span>
+</pre></div>
+
+
+<h2 id="usage:03285bdc704a53de2afbdd4c6c57e10d">Usage</h2>
+
+<p><strong>filter</strong> wraps around GNU <a href="http://en.wikipedia.org/wiki/Sed">sed</a>, so it uses <code>s/search/replace</code> syntax. For example, to rename all <code>.txt</code> files, changing the <code>a</code>&rsquo;s to <code>e</code>&rsquo;s:</p>
+
+<p><div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span style="color: #000000">$ </span>filter *.txt s/a/e/
+</pre></div>
+</p>
+
+<p>The syntax also supports <a href="http://www.regular-expressions.info/brackets.html">backreferences</a>, which are captured in brackets. Refer to groups with <code>\1</code>, <code>\2</code> etc.</p>
+
+<p><div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span style="color: #000000">$ </span>filter * <span style="color: #C41A16">&quot;s/foo\(.\)bar/baz\1/&quot;</span>
+
+foo1bar.txt    -&gt;     baz1.txt
+foo2bar.txt    -&gt;     baz2.txt
+foo3bar.txt    -&gt;     baz3.txt
+Rename these files? <span style="color: #000000">[</span>y/N<span style="color: #000000">]</span>
+</pre></div>
+</p>
+
+<h2 id="why:03285bdc704a53de2afbdd4c6c57e10d">Why?</h2>
+
+<p><strong>filter</strong> is just a small script, but it solves a frustrating problem. Every time I&rsquo;m in this situation I consult Google and come across gems like:</p>
+
+<ul>
+<li><code>find . -exec echo</code>echo &ldquo;{}&rdquo; | sed &rsquo;s/./foo/g&rsquo;<code>\;</code></li>
+<li><code>ls F00001-0708-*|sed 's/\(.\).\(.*\)/mv &amp; \1\2/' | sh</code></li>
+<li><code>for i in *; do ; mv &quot;$i&quot; &quot;</code>echo $i | sed &ldquo;s/(.<em>) - (.</em>) - (.<em>) - (.</em>).ogg/\1 - \4 - \3 - \2.ogg/&rdquo;<code>&quot;; done</code></li>
+</ul>
+
+<p>I hope that you like my solution better.</p>
+
+	        </section>
+
+	        <section class="post-tags" style="padding-bottom:60px;">
+	            <div class="post-meta tags">
+	            <i class="fa fa-fw fa-tag"></i>
+	            
+	            </div>
+	        </section>
+			
+			
+			
+			
+
+	        <section class="share">
+	            <p class="backtotop"><a data-scroll href="#site-head"><i class="fa fa-lg fa-fw fa-angle-double-up"></i></a><a data-scroll class="backtotoptext" href="#site-head"> Back to top</a></p>
+	            <p class="info prompt">Share</p>
+	            <a href="http://twitter.com/share?text=%2fusr%2fbin%2ffilter&url=http%3a%2f%2ftomre.es%2fpost%2ffilter%2f" title="Share on Twitter"
+	                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+	                <i class="fa fa-2x fa-fw fa-twitter-square"></i> <span class="hidden">Twitter</span>
+	            </a>
+	            <a href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2ftomre.es%2fpost%2ffilter%2f" title="Share on Facebook"
+	                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+	                <i class="fa fa-2x fa-fw fa-facebook-square" style="margin-left: -8px"></i> <span class="hidden">Facebook</span>
+	            </a>
+	            <a href="https://plus.google.com/share?url=http%3a%2f%2ftomre.es%2fpost%2ffilter%2f" title="Share on Google+"
+	               onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+	                <i class="fa fa-2x fa-fw fa-google-plus-square" style="margin-left: -8px"></i> <span class="hidden">Google+</span>
+	            </a>
+	        </section>
+
+	        <footer class="post-footer">
+	            <section class="author">
+    <div class="authorimage" style="background: url(http://tomre.es/img/avatar.jpg)"></div>
+    <h4>Tom Rees</h4>
+    <p class="bio">Hacker, entrepreneur, and founder of <a href="http://datapress.com">DataPress</a>.<br/>I live in London, I drink strong coffee and I love brightly coloured graphs.</p>
+    <p class="meta">
+      <i class="fa fa-fw fa-map-marker"></i> London
+    </p>
+</section>
+	        </footer>
+	    </article>
+	</main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+			
+		    <a href="//twitter.com/zephod" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+		    
+		    
+		    <a href="//github.com/zephod" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+		    
+		    <a href="" target="_blank" title="RSS"><i class="fa fa-2x fa-fw fa-rss"></i> <span class="hidden">RSS</span></a>
+		</section>
+
+		<section class="copyright">&copy; 2016 <a href="http://tomre.es/">Tom Rees</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+    <script src="http://tomre.es/gen/app.js"></script>
+<script src="http://tomre.es/js/smooth-scroll.min.js"></script>
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+
+
+<!-- Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-21330985-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
